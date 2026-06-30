@@ -1,26 +1,24 @@
-import { useEffect, useState } from "react";
-import { data, type dataProp } from "../../data/data";
+import React, { useMemo } from "react";
 import { GetPath } from "../../Hook/GetPaths";
 import MainPage from "./MainPage";
+import type { getData } from "../../Layout/AppLayout";
 
-const Main = () => {
+type onlyData = Omit<getData, "setData">
+
+const Main: React.FC<onlyData> = ({ Data }) => {
     const location = GetPath();
 
-    const Datas: dataProp[] = data;
+    const taskNames = useMemo(() => {
+        if (!Data) return [];
+        return Data.map((task) => task.name);
+    }, [Data]);
 
-    const [tasks,setTasks] = useState<string[]>(Datas.map((task)=> task.name)); //data.name fetch data name from backened
-
-    useEffect(() => {
-      setTasks(Datas.map((task)=> task.name))
-    }, [location])
-    
-
+    const isTaskFound = taskNames.includes(location);
 
     return (
         <>
-            {tasks.includes(location) ? (
+            {isTaskFound ? (
                 <MainPage name={location} />
-                // <MainPage name='project1'/>
             ) : (
                 <div className="w-full bg-red-100 h-screen">
                     <h1 className="text-text">not found</h1>

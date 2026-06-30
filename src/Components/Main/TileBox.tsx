@@ -56,7 +56,7 @@ const TileBox: React.FC<TileBoxProps> = ({
           : {
               ...d,
               task: d.task?.map(
-                (t) => (t.id === taskId ? { ...t, type: "done" } : t), // sirf ek task update ho
+                (t) => (t.id === taskId ? { ...t, type: "done" } : t),
               ),
             },
       ),
@@ -130,7 +130,7 @@ const TileBox: React.FC<TileBoxProps> = ({
                 id={task.id}
                 name={task.name}
                 className="accent-blue-500"
-                onClick={() => {
+                onChange={() => {
                   handleDone(task.id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
