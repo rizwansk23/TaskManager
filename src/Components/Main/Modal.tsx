@@ -1,5 +1,6 @@
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
+import AddButton from "../AddButton";
 
 const Modal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,12 +26,7 @@ const Modal = () => {
 
   return (
     <div>
-      <button
-        className="border-border border-2 rounded-xl px-3 py-2 active:scale-95 active:border-white ease-in-out flex items-center gap-2"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Plus size={20} /> Add Tasks
-      </button>
+      <AddButton text="Add Task" Function={ ()=>{setIsOpen(!isOpen) }} />
       {isOpen && (
         <div
           id="modal"
@@ -39,8 +35,8 @@ const Modal = () => {
         >
           <div className="bg-black w-1/3 h-fit px-4 py-5 rounded-2xl">
             <header className="flex justify-between items-center text-text-h text-xl">
-              <h1>create</h1>
-              <button onClick={() => setIsOpen(!isOpen)}>
+              <kbd className="text-2xl font-bold">Create</kbd>
+              <button  className="cursor-pointer active:scale-90" onClick={() => setIsOpen((prev) => !prev)}>
                 <X />
               </button>
             </header>

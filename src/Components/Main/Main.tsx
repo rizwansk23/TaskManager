@@ -3,7 +3,7 @@ import { GetPath } from "../../Hook/GetPaths";
 import MainPage from "./MainPage";
 import type { getData } from "../../Layout/AppLayout";
 
-type onlyData = Omit<getData, "setData">
+type onlyData = Pick<getData, "Data">
 
 const Main: React.FC<onlyData> = ({ Data }) => {
     const location = GetPath();

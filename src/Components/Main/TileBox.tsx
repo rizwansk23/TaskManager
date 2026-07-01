@@ -55,13 +55,15 @@ const TileBox: React.FC<TileBoxProps> = ({
           ? d
           : {
               ...d,
-              task: d.task?.map(
-                (t) => (t.id === taskId ? { ...t, type: "done" } : t),
+              task: d.task?.map((t) =>
+                t.id === taskId ? { ...t, type: "done" } : t,
               ),
             },
       ),
     );
   };
+
+  const bg = { done: "green", todo: "red", progress: "yellow" };
 
   return (
     <section
@@ -85,7 +87,7 @@ const TileBox: React.FC<TileBoxProps> = ({
         <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
           {filtered.length}
         </span>
-        <hr className="border border-border flex-1" />
+        <hr className="border-2 border-border flex-1" />
       </header>
 
       {/* Cards */}
@@ -114,14 +116,16 @@ const TileBox: React.FC<TileBoxProps> = ({
               border border-transparent cursor-grab active:cursor-grabbing
               select-none transition-all duration-150
               hover:border-gray-300 hover:bg-white dark:hover:bg-gray-800
-              ${draggingId === task.id ? "opacity-40 scale-95" : "opacity-100"}
+              ${draggingId === task.id ? "opacity-40 scale-95 " : "opacity-100"}
             `}
             >
               <span
                 className="text-gray-300 text-lg leading-none"
                 onPointerDown={(e) => e.stopPropagation()}
               >
-                <div className="size-2 rounded-full bg-red-400"></div>
+                <div
+                  className={`size-2 rounded-full bg-${bg[task.type]}-400`}
+                ></div>
               </span>
 
               <input
@@ -129,16 +133,20 @@ const TileBox: React.FC<TileBoxProps> = ({
                 checked={isSelected}
                 id={task.id}
                 name={task.name}
-                className="accent-blue-500"
+                className="accent-bg size-4 hover:accent-indigo-600 rounded-3xl hover:cursor-pointer  "
                 onChange={() => {
                   handleDone(task.id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
               />
 
-              <span className="flex-1 text-sm">{task.name}</span>
+              <span
+                className={`flex-1 text-sm  ${isSelected ? "line-through decoration-1 text-gray-600" : "text-text-h"}`}
+              >
+                {task.name}
+              </span>
 
-                {/* <span>{Date()}</span> */}
+              {/* <span>{Date()}</span> */}
               <span className="text-xs text-gray-400 capitalize">
                 {task.type}
               </span>
