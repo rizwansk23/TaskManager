@@ -1,24 +1,27 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { GetPath } from "../../Hook/GetPaths";
 import MainPage from "./MainPage";
 import type { getData } from "../../Layout/AppLayout";
+import { useNavigate } from "react-router-dom";
 
-type onlyData = Pick<getData, "Data">
+export type onlyData = Pick<getData, "Data" | 'isLoading'>
 
-const Main: React.FC<onlyData> = ({ Data }) => {
+const Main: React.FC<onlyData> = ({ Data, isLoading }) => {
     const location = GetPath();
+    const navigate = useNavigate()
+    
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-    const taskNames = useMemo(() => {
-        if (!Data) return [];
-        return Data.map((task) => task.name);
-    }, [Data]);
+    const isTaskFound = Data.some((project) => project.name === location);
 
-    const isTaskFound = taskNames.includes(location);
+    if(!isTaskFound) navigate('/');
 
     return (
         <>
             {isTaskFound ? (
-                <MainPage name={location} />
+                <MainPage name={location} data={Data} />
             ) : (
                 <div className="w-full bg-red-100 h-screen">
                     <h1 className="text-text">not found</h1>

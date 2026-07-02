@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { getData } from "../../Layout/AppLayout";
 import { Layers } from "lucide-react";
 
-type getonlyData = Omit<getData, "setData">;
+type getonlyData = Omit<getData, "setData" | 'isLoading'>;
 
 const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
   const [open, setopen] = useState<boolean>(false);
@@ -32,7 +32,7 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
           }`}
         >
           {Data.slice(0, open ? Data.length : 3).map((data) => {
-            const taskCount = data.task?.length ?? 0;
+            const taskCount = data.tasks?.length ?? 0;
 
             return (
               <Link key={data.name} to={data.name}>

@@ -1,8 +1,10 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import AddButton from "../AddButton";
+import type { dataProp, Task } from "../../data/data";
+import axios from "axios";
 
-const Modal = () => {
+const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<React.SetStateAction<dataProp[]>> }> = ({ name, data, setData }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -13,11 +15,38 @@ const Modal = () => {
   date.setDate(date.getDate() + 10);
   const maxDateString = date.toISOString().split("T")[0];
 
-  function HandleSubmit(e: React.SubmitEvent) {
+
+  const currentProject: dataProp | undefined = data.find((data) => data.name == name)
+
+
+  async function HandleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
+
     console.log(title);
     console.log(message);
     console.log(maxDateString);
+
+    setData((prev) =>
+      prev.map((project) =>
+        project.name === currentProject?.name 
+          ? {
+            ...project,
+            tasks: [
+              ...(project.tasks ?? []),
+              {
+                _id : crypto.randomUUID(),
+                name: title,
+                status: "todo",
+              },
+            ],
+          }
+          : project
+      )
+    );
+
+
+    await axios.post(`http://localhost:8000/project/${currentProject?._id}/task`, { name: title })
+
     setDueDate("");
     setTitle("");
     setMessage("");
@@ -26,7 +55,7 @@ const Modal = () => {
 
   return (
     <div>
-      <AddButton text="Add Task" Function={ ()=>{setIsOpen(!isOpen) }} />
+      <AddButton text="Add Task" Function={() => { setIsOpen(!isOpen) }} />
       {isOpen && (
         <div
           id="modal"
@@ -36,7 +65,7 @@ const Modal = () => {
           <div className="bg-black w-1/3 h-fit px-4 py-5 rounded-2xl">
             <header className="flex justify-between items-center text-text-h text-xl">
               <kbd className="text-2xl font-bold">Create</kbd>
-              <button  className="cursor-pointer active:scale-90" onClick={() => setIsOpen((prev) => !prev)}>
+              <button className="cursor-pointer active:scale-90" onClick={() => setIsOpen((prev) => !prev)}>
                 <X />
               </button>
             </header>
@@ -96,4 +125,4 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default Modal

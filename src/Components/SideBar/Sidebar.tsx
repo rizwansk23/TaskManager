@@ -5,8 +5,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { getData } from "../../Layout/AppLayout";
 import List from "./List";
 import type { dataProp } from "../../data/data";
+import axios from "axios";
+import GenerateId from "../../utils/GenerateId";
 
-const Sidebar: React.FC<getData> = ({ Data, setData,isOpen ,setIsOpen }) => {
+const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, setIsOpen }) => {
 
   const location = useLocation().pathname
 
@@ -17,6 +19,8 @@ const Sidebar: React.FC<getData> = ({ Data, setData,isOpen ,setIsOpen }) => {
 
   const ref = useRef<HTMLInputElement | null>(null); // reference of input box
   const navigate = useNavigate();
+
+  const guestId = GenerateId()
 
   //foucs the input box when its open and unfoucs when its close
   useEffect(() => {
@@ -37,14 +41,22 @@ const Sidebar: React.FC<getData> = ({ Data, setData,isOpen ,setIsOpen }) => {
     setIsOpen(false);
   });
 
-  function Handlesubmit(e: React.SubmitEvent | React.KeyboardEvent) {
+  const Handlesubmit = async (e: React.SubmitEvent | React.KeyboardEvent) => {
     e.preventDefault();
-    if (!Inputvalue.trim()) return;
+    const value = Inputvalue.trim()
+    if (!value) return;
     setData((prev) => [
       ...prev,
-      { name: Inputvalue.trim() },
+      { name: value },
     ]);
-    navigate(`/${Inputvalue}`)
+
+    await axios.post('http://localhost:8000/project', {
+      ProjectName: value,
+      guestId: guestId
+    })
+
+    navigate(`/${value}`)
+    setSelected(value)
     setIsOpen(!isOpen);
   }
 
@@ -84,10 +96,10 @@ const Sidebar: React.FC<getData> = ({ Data, setData,isOpen ,setIsOpen }) => {
               return (
                 <div
                   onClick={() => setSelected(data.name)}
-                  key={index}
+                  key={data._id}
                   className={`list rounded-xl /active:scale-98 ease-in-out ${isSelected && "bg-[#000000b1]"}`}
                 >
-                  <List datas={data.name} index={index} setData={setData} isSelected={isSelected} />
+                  <List datas={data} index={index} setData={setData} isSelected={isSelected}  />
                 </div>
               );
             })}

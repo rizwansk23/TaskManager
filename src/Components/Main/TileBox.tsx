@@ -1,5 +1,6 @@
 import React, { useState, type DragEvent } from "react";
 import { type dataProp, type Task, type TaskType } from "../../data/data";
+import axios from "axios";
 
 interface TileBoxProps {
   title: string;
@@ -35,7 +36,7 @@ const TileBox: React.FC<TileBoxProps> = ({
   onDrop,
 }) => {
   const [isOver, setIsOver] = useState(false);
-  const filtered = tasks.filter((t) => t.type === type);
+  const filtered = tasks.filter((t) => t.status === type);
 
   const handleDragOver = (e: DragEvent<HTMLElement>) => {
     e.preventDefault();
@@ -55,15 +56,17 @@ const TileBox: React.FC<TileBoxProps> = ({
           ? d
           : {
               ...d,
-              task: d.task?.map((t) =>
-                t.id === taskId ? { ...t, type: "done" } : t,
+              task: d.tasks?.map((t) =>
+                t._id === taskId ? { ...t, status: "completed" } : t,
               ),
             },
       ),
     );
+    
+        // axios.patch(`http://localhost:8000/project/${currentProject?._id}/task/${taskId}`,{status:'completed'})
   };
 
-  const bg = { done: "green", todo: "red", progress: "yellow" };
+  const bg = { "completed": "bg-green-400", "todo": "bg-red-400", "progress": "bg-yellow-400" };
 
   return (
     <section
@@ -99,16 +102,16 @@ const TileBox: React.FC<TileBoxProps> = ({
         )}
 
         {filtered.map((task) => {
-          const isSelected = task.type == "done";
+          const isSelected = task.status == "completed";
           return (
             <label
-              key={task.id}
-              htmlFor={task.id}
+              key={task._id}
+              htmlFor={task._id}
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.effectAllowed = "move";
-                e.dataTransfer.setData("text/plain", task.id);
-                onDragStart(task.id);
+                e.dataTransfer.setData("text/plain", task._id);
+                onDragStart(task._id);
               }}
               onDragEnd={onDragEnd}
               className={`
@@ -116,7 +119,7 @@ const TileBox: React.FC<TileBoxProps> = ({
               border border-transparent cursor-grab active:cursor-grabbing
               select-none transition-all duration-150
               hover:border-gray-300 hover:bg-white dark:hover:bg-gray-800
-              ${draggingId === task.id ? "opacity-40 scale-95 " : "opacity-100"}
+              ${draggingId === task._id ? "opacity-40 scale-95 " : "opacity-100"}
             `}
             >
               <span
@@ -124,18 +127,18 @@ const TileBox: React.FC<TileBoxProps> = ({
                 onPointerDown={(e) => e.stopPropagation()}
               >
                 <div
-                  className={`size-2 rounded-full bg-${bg[task.type]}-400`}
+                  className={`size-2 rounded-full ${bg[task.status]}`}
                 ></div>
               </span>
 
               <input
                 type="checkbox"
                 checked={isSelected}
-                id={task.id}
+                id={task._id}
                 name={task.name}
                 className="accent-bg size-4 hover:accent-indigo-600 rounded-3xl hover:cursor-pointer  "
                 onChange={() => {
-                  handleDone(task.id);
+                  handleDone(task._id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
               />
@@ -148,7 +151,7 @@ const TileBox: React.FC<TileBoxProps> = ({
 
               {/* <span>{Date()}</span> */}
               <span className="text-xs text-gray-400 capitalize">
-                {task.type}
+                {task.status}
               </span>
             </label>
           );

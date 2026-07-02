@@ -6,11 +6,12 @@ import type React from 'react'
 export interface getData {
   Data: dataProp[],
   setData: React.Dispatch<React.SetStateAction<dataProp[]>>,
+  isLoading: boolean,
   isOpen: boolean,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const AppLayout: React.FC<getData> = ({ Data, setData ,isOpen,setIsOpen }) => {
+const AppLayout: React.FC<Omit<getData,'isLoading'>> = ({ Data, setData ,isOpen,setIsOpen }) => {
   return (
     <div className='relative flex'>
       <Sidebar Data={Data} setData={setData} isOpen={isOpen} setIsOpen={setIsOpen} />

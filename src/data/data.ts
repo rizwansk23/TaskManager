@@ -1,56 +1,61 @@
 export interface dataProp {
+ _id?: string;
   name: string;
-  task?: Task[];
+  userId?: string | null;
+  guestId?: string | null;
+  tasks?: Task[] ;
+  createdAt?: string;
+  updatedAt?: string;
 }
 [];
 
-export type TaskType = "todo" | "progress" | "done";
+export type TaskType ="todo" | "progress" | "completed";
  
 export interface Task {
-  id: string;
+  _id: string;
   name: string;
-  type: TaskType;
+  status: TaskType;
 }
  
 
 export const data: dataProp[] = [
   {
     name: "app",
-    task: [
+    tasks: [
       {
-        id:'1',
+        _id:'1',
         name: "ok",
-        type: "todo",
+        status: "todo",
       },
-      {id:'2',
+      {_id:'2',
         name: "ok",
-        type: "progress",
+        status: "progress",
       },
-      {id:'3',
+      {_id:'3',
         name: "ok",
-        type: "done",
+        status: "completed",
       },
-      {id:'4',
+      {_id:'4',
         name: "i completed",
-        type: "todo",
+        status: "todo",
       },
     ],
   },
   {
     name: "web",
-    task: [
-      {id:'1',
+    tasks: [
+      {_id:'1',
         name: "ok",
-        type: "todo",
+        status: "todo",
       },
     ],
   },
   {
     name: "DSA",
-    task: [
-      {id:'1',
+    tasks: [
+      {_id:'1',
         name: "ok",
-        type: "todo",
+        status: "todo",
       },
     ],
   }
