@@ -1,16 +1,5 @@
 import React, { useState, type DragEvent } from "react";
 import { type dataProp, type Task, type TaskType } from "../../data/data";
-import axios from "axios";
-
-interface TileBoxProps {
-  title: string;
-  type: TaskType;
-  tasks: Task[];
-  draggingId: string | null;
-  onDragStart: (id: string) => void;
-  onDragEnd: () => void;
-  onDrop: (targetType: TaskType) => void;
-}
 
 interface TileBoxProps {
   title: string;
@@ -49,30 +38,32 @@ const TileBox: React.FC<TileBoxProps> = ({
     setIsOver(false);
     onDrop(type);
   };
+
   const handleDone = (taskId: string) => {
     setData((prev) =>
       prev.map((d) =>
-        d.name !== name // "name" = current user/project prop
+        d.name !== name
           ? d
           : {
               ...d,
-              task: d.tasks?.map((t) =>
+              tasks: d.tasks?.map((t) =>
                 t._id === taskId ? { ...t, status: "completed" } : t,
               ),
             },
       ),
     );
-    
-        // axios.patch(`http://localhost:8000/project/${currentProject?._id}/task/${taskId}`,{status:'completed'})
   };
 
-  const bg = { "completed": "bg-green-400", "todo": "bg-red-400", "progress": "bg-yellow-400" };
+  const bg = {
+    completed: "bg-green-400",
+    todo: "bg-red-400",
+    progress: "bg-yellow-400",
+  };
 
   return (
     <section
       onDragOver={handleDragOver}
       onDragLeave={(e) => {
-        // only clear when truly leaving the section (not entering a child)
         if (!e.currentTarget.contains(e.relatedTarget as Node)) {
           setIsOver(false);
         }
@@ -84,7 +75,6 @@ const TileBox: React.FC<TileBoxProps> = ({
           : "border-transparent"
       }`}
     >
-      {/* Header */}
       <header className="flex items-center gap-3 px-1 mb-2">
         <h2 className="font-bold text-sm">{title}</h2>
         <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">
@@ -93,8 +83,7 @@ const TileBox: React.FC<TileBoxProps> = ({
         <hr className="border-2 border-border flex-1" />
       </header>
 
-      {/* Cards */}
-      <div className="flex flex-col gap-1 ">
+      <div className="flex flex-col gap-1">
         {filtered.length === 0 && (
           <p className="text-xs text-gray-400 text-center py-4">
             Drop tasks here
@@ -102,7 +91,7 @@ const TileBox: React.FC<TileBoxProps> = ({
         )}
 
         {filtered.map((task) => {
-          const isSelected = task.status == "completed";
+          const isSelected = task.status === "completed";
           return (
             <label
               key={task._id}
@@ -115,20 +104,18 @@ const TileBox: React.FC<TileBoxProps> = ({
               }}
               onDragEnd={onDragEnd}
               className={`
-              flex items-center gap-3 px-3 py-2.5 rounded-xl
-              border border-transparent cursor-grab active:cursor-grabbing
-              select-none transition-all duration-150
-              hover:border-gray-300 hover:bg-white dark:hover:bg-gray-800
-              ${draggingId === task._id ? "opacity-40 scale-95 " : "opacity-100"}
-            `}
+                flex items-center gap-3 px-3 py-2.5 rounded-xl
+                border border-transparent cursor-grab active:cursor-grabbing
+                select-none transition-all duration-150
+                hover:border-gray-300 hover:bg-white dark:hover:bg-gray-800
+                ${draggingId === task._id ? "opacity-40 scale-95" : "opacity-100"}
+              `}
             >
               <span
                 className="text-gray-300 text-lg leading-none"
                 onPointerDown={(e) => e.stopPropagation()}
               >
-                <div
-                  className={`size-2 rounded-full ${bg[task.status]}`}
-                ></div>
+                <div className={`size-2 rounded-full ${bg[task.status]}`} />
               </span>
 
               <input
@@ -136,20 +123,21 @@ const TileBox: React.FC<TileBoxProps> = ({
                 checked={isSelected}
                 id={task._id}
                 name={task.name}
-                className="accent-bg size-4 hover:accent-indigo-600 rounded-3xl hover:cursor-pointer  "
-                onChange={() => {
-                  handleDone(task._id);
-                }}
+                className="accent-bg size-4 hover:accent-indigo-600 rounded-3xl hover:cursor-pointer"
+                onChange={() => handleDone(task._id)}
                 onPointerDown={(e) => e.stopPropagation()}
               />
 
               <span
-                className={`flex-1 text-sm  ${isSelected ? "line-through decoration-1 text-gray-600" : "text-text-h"}`}
+                className={`flex-1 text-sm ${
+                  isSelected
+                    ? "line-through decoration-1 text-gray-600"
+                    : "text-text-h"
+                }`}
               >
                 {task.name}
               </span>
 
-              {/* <span>{Date()}</span> */}
               <span className="text-xs text-gray-400 capitalize">
                 {task.status}
               </span>
@@ -160,4 +148,5 @@ const TileBox: React.FC<TileBoxProps> = ({
     </section>
   );
 };
+
 export default TileBox;

@@ -1,8 +1,8 @@
 import React from "react";
 import { GetPath } from "../../Hook/GetPaths";
-import MainPage from "./MainPage";
 import type { getData } from "../../Layout/AppLayout";
 import { useNavigate } from "react-router-dom";
+import MainPage from "./MainPage";
 
 export type onlyData = Pick<getData, "Data" | 'isLoading'>
 
@@ -12,7 +12,7 @@ const Main: React.FC<onlyData> = ({ Data, isLoading }) => {
     
     if (isLoading) {
         return <div>Loading...</div>;
-    }
+    }   
 
     const isTaskFound = Data.some((project) => project.name === location);
 
