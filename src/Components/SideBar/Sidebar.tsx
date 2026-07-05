@@ -54,7 +54,8 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       ProjectName: value,
       guestId: guestId
     })
-
+    // const values  = decodeURIComponent(value)
+    // console.log(values)
     navigate(`/${value}`)
     setSelected(value)
     setIsOpen(!isOpen);
@@ -96,7 +97,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
               return (
                 <div
                   onClick={() => setSelected(data.name)}
-                  key={data._id}
+                  key={data._id || data.name}
                   className={`list rounded-xl /active:scale-98 ease-in-out ${isSelected && "bg-[#000000b1]"}`}
                 >
                   <List datas={data} index={index} setData={setData} isSelected={isSelected}  />

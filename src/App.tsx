@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./Layout/AppLayout";
 import Main from "./Components/Main/Main";
 import { useEffect, useState } from "react";
-import { data, type dataProp } from "./data/data";
+import { type dataProp } from "./data/data";
 import Home from "./Components/Home/Home";
 import GenerateId from "./utils/GenerateId";
 import axios from "axios";
@@ -18,11 +18,9 @@ const App = () => {
   useEffect(() => {
     const fetch = async () => {
       try{
-        const response = await axios.get('http://localhost:8000/project', { params: { "guestId": guestId } })
+        const response = await (await axios.get('http://localhost:8000/project', { params: { "guestId": guestId } })).data
 
-
-      console.log(response.data)
-      setData(response.data.data)
+      setData(response.data)
       setLoading(false);
       }catch(err){
         console.log(err);
