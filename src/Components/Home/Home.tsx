@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import AddButton from "../Components/AddButton";
+import AddButton from "../AddButton";
 import { Link } from "react-router-dom";
-import type { getData } from "../Layout/AppLayout";
+import type { getData } from "../../Layout/AppLayout";
 import { Layers } from "lucide-react";
 
 type getonlyData = Omit<getData, "setData" | 'isLoading'>;
@@ -16,8 +16,9 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
         </div>
         <kbd className="text-4xl text-text-h font-bold">Your WorkSpace</kbd>
         <div className="leading-5 tracking-tight text-center">
-          <h5>Select a project from the sidebar OR</h5>
-          <h5>Create a new one to get started.</h5>
+          <h5>Select a project from the sidebar </h5>
+          <h5>or</h5>
+          <h5> create a new one to get started.</h5>
         </div>
         <AddButton
           text="Add Project"
@@ -25,7 +26,7 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
             setIsOpen(!isOpen);
           }}
         />
-        {Data.length !== 0 && <kbd className="uppercase">Recent Projects</kbd>}
+        {Data && <kbd className="uppercase">Recent Projects</kbd>}
         <div
           className={`grid grid-cols-3 gap-3 ${
             open ? "h-fit" : "overflow-hidden h-30"

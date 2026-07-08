@@ -2,8 +2,7 @@ import React from "react";
 import { GetPath } from "../../Hook/GetPaths";
 import type { getData } from "../../Layout/AppLayout";
 import { useNavigate } from "react-router-dom";
-import MainPage from "../../Pages/MainPage";
-import SkeletonPage from "../../Pages/SkeletonPage";
+import MainPage from "./MainPage";
 
 export type onlyData = Pick<getData, "Data" | 'isLoading' | 'setData'>
 
@@ -13,7 +12,7 @@ const Main: React.FC<onlyData> = ({ Data, isLoading , setData }) => {
     const navigate = useNavigate()
     
     if (isLoading) {
-        return <SkeletonPage />;
+        return <div>Loading...</div>;
     }   
 
     const isTaskFound = Data.some((project) => project.name === Paths);
@@ -25,7 +24,7 @@ const Main: React.FC<onlyData> = ({ Data, isLoading , setData }) => {
             {isTaskFound ? (
                 <MainPage name={Paths} data={Data} setData={setData} />
             ) : (
-                <div className="w-full bg-bg h-screen">
+                <div className="w-full bg-red-100 h-screen">
                     <h1 className="text-text">not found</h1>
                 </div>
             )}

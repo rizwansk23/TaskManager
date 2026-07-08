@@ -50,11 +50,11 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       { name: value },
     ]);
 
-    await api.post('/project', {
+    await api.post('http://localhost:8000/project', {
       ProjectName: value,
       guestId: guestId
     })
-    setInputvalue('')
+    
     navigate(`/${value}`)
     setSelected(value)
     setIsOpen(!isOpen);
@@ -110,7 +110,6 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
               type="text"
               id="foldername"
               name="foldername"
-              value={Inputvalue}
               className="border-white text-text-h w-full text-lg"
               onChange={(e) => {
                 setInputvalue(e.target.value);
