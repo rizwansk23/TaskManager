@@ -3,9 +3,10 @@ import AppLayout from "./Layout/AppLayout";
 import Main from "./Components/Main/Main";
 import { useEffect, useState } from "react";
 import { type dataProp } from "./data/data";
-import Home from "./Components/Home/Home";
+import Home from "./Pages/Home";
 import GenerateId from "./utils/GenerateId";
 import axios from "axios";
+import NotFound from "./Pages/NotFound";
 
 const App = () => {
 
@@ -14,11 +15,11 @@ const App = () => {
   const [isloading, setLoading] = useState<boolean>(true)
 
   const guestId = GenerateId(); // generate a random id 
-
+  
   useEffect(() => {
     const fetch = async () => {
       try{
-        const response = (await axios.get('http://localhost:8000/project', { params: { "guestId": guestId }})).data
+        const response = (await axios.get('/project', { params: { "guestId": guestId }})).data
 
       setData(response.data)
       setLoading(false);
@@ -32,7 +33,6 @@ const App = () => {
   }, [isOpen])
 
 
-
   const route = createBrowserRouter([
     {
       path: "/",
@@ -44,6 +44,9 @@ const App = () => {
         }, {
           path: '/',
           element: <Home Data={Data} isOpen={isOpen} setIsOpen={setIsOpen} />
+        },{
+          path:'*',
+          element:<NotFound Data={Data}/>
         }
       ],
     },

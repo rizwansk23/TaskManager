@@ -40,7 +40,7 @@ const Modal: React.FC<{ currentProject : dataProp | undefined, setData: React.Di
     );
 
     try {
-      await axios.post(`http://localhost:8000/project/${currentProject?._id}/task`, { _id: id, name: TitleValue, date: currentdate });
+      await axios.post(`/project/${currentProject?._id}/task`, { _id: id, name: TitleValue, date: currentdate });
     }
     catch (err) {
       alert(err)

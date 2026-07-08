@@ -50,11 +50,11 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       { name: value },
     ]);
 
-    await axios.post('http://localhost:8000/project', {
+    await axios.post('/project', {
       ProjectName: value,
       guestId: guestId
     })
-    
+    setInputvalue('')
     navigate(`/${value}`)
     setSelected(value)
     setIsOpen(!isOpen);
@@ -90,7 +90,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 pb-4">
+          <div className="flex flex-col gap-2">
             {data.map((data, index) => {
               const isSelected: boolean = Data[index].name == Selected;
               return (
@@ -110,6 +110,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
               type="text"
               id="foldername"
               name="foldername"
+              value={Inputvalue}
               className="border-white text-text-h w-full text-lg"
               onChange={(e) => {
                 setInputvalue(e.target.value);

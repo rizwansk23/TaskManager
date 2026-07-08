@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server:{
     proxy :{
-      '/product' : 'http://localhost:8000'
+      '/project' : 'http://localhost:8000'
     }
   },
   plugins: [

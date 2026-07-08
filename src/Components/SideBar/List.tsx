@@ -50,7 +50,7 @@ const List: React.FC<ListProp> = ({ datas, index, setData, isSelected }) => {
       prev.map((d) => (d.name === datas.name ? { ...d, name: inputValue } : d)),
     );
 
-    await axios.patch(`http://localhost:8000/project/${datas._id}`, { name: inputValue.trim() })
+    await axios.patch(`/project/${datas._id}`, { name: inputValue.trim() })
 
     navigate(`/${value}`);
     setvalue(inputValue);
@@ -59,7 +59,7 @@ const List: React.FC<ListProp> = ({ datas, index, setData, isSelected }) => {
 
   const handleDelete = async () => {
     setData((prev) =>  prev.filter((data) => { return data._id !== datas._id }) )
-    await axios.delete(`http://localhost:8000/project/${datas._id}`)
+    await axios.delete(`/project/${datas._id}`)
   }
 
   return (

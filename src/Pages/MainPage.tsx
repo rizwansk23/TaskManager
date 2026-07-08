@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Modal from "./Modal";
-import { type dataProp, type Task, type TaskType } from "../../data/data";
+import Modal from "../Components/Main/Modal";
+import { type dataProp, type Task, type TaskType } from "../data/data";
 import axios from "axios";
-import TileBox from "./TileBox";
-import { useDebounce } from "../../Hook/Debouncing";
-import TodoCard from "./TodoCard";
+import TileBox from "../Components/Main/TileBox";
+import { useDebounce } from "../Hook/Debouncing";
+import TodoCard from "../Components/Main/TodoCard";
 
 const COLUMNS: { status: TaskType; title: string }[] = [
   { status: "todo", title: "To Do" },
@@ -60,7 +60,7 @@ const MainPage: React.FC<{
     setDraggingId(null);
 
     await axios.patch(
-      `http://localhost:8000/project/${currentProject?._id}/task/${draggingId}`,
+      `/project/${currentProject?._id}/task/${draggingId}`,
       { status: targetType },
     );
   };
@@ -87,7 +87,7 @@ const MainPage: React.FC<{
       ),
     );
     await axios.patch(
-      `http://localhost:8000/project/${currentProject?._id}/task/${taskId}`,
+      `/project/${currentProject?._id}/task/${taskId}`,
       { status: taskType },
     );
   };
@@ -105,7 +105,7 @@ const MainPage: React.FC<{
             },
       ),
     );
-    await axios.delete(`http://localhost:8000/project/${currentProject?._id}/task/${taskId}`)
+    await axios.delete(`/project/${currentProject?._id}/task/${taskId}`)
   };
   return (
     <div className="w-full bg-bg text-text">
