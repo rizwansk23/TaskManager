@@ -2,7 +2,7 @@ import React from "react";
 import { GetPath } from "../../Hook/GetPaths";
 import type { getData } from "../../Layout/AppLayout";
 import { useNavigate } from "react-router-dom";
-import MainPage from "./MainPage";
+import MainPage from "../../Pages/MainPage";
 
 export type onlyData = Pick<getData, "Data" | 'isLoading' | 'setData'>
 
