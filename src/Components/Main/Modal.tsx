@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import React, { useState } from "react";
 import AddButton from "../AddButton";
 import type { dataProp } from "../../data/data";
-import axios from "axios";
+import api from "../../utils/Axios";
 
 const Modal: React.FC<{ currentProject : dataProp | undefined, setData: React.Dispatch<React.SetStateAction<dataProp[]>> }> = ({ currentProject, setData }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const Modal: React.FC<{ currentProject : dataProp | undefined, setData: React.Di
     );
 
     try {
-      await axios.post(`/project/${currentProject?._id}/task`, { _id: id, name: TitleValue, date: currentdate });
+      await api.post(`/project/${currentProject?._id}/task`, { _id: id, name: TitleValue, date: currentdate });
     }
     catch (err) {
       alert(err)

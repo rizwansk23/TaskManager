@@ -5,8 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { getData } from "../../Layout/AppLayout";
 import List from "./List";
 import type { dataProp } from "../../data/data";
-import axios from "axios";
 import GenerateId from "../../utils/GenerateId";
+import api from "../../utils/Axios";
 
 const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, setIsOpen }) => {
 
@@ -50,7 +50,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       { name: value },
     ]);
 
-    await axios.post('/project', {
+    await api.post('/project', {
       ProjectName: value,
       guestId: guestId
     })
@@ -77,7 +77,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
           <kbd className="text-4xl text-white">To-do</kbd>
         </header>
         <main className="flex-1 px-2">
-          <div className="flex justify-between items-center px-4 py-5 ">
+          <div className="flex justify-between items-center px-4 pt-5 pb-3 ">
             <h1 className="text-base">Projects</h1>
             <div
               onClick={(e: React.MouseEvent) => {
@@ -90,7 +90,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 pb-3">
             {data.map((data, index) => {
               const isSelected: boolean = Data[index].name == Selected;
               return (
