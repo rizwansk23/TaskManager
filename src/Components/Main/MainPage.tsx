@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
 import Modal from "./Modal";
 import { type dataProp, type Task, type TaskType } from "../../data/data";
 import axios from "axios";
