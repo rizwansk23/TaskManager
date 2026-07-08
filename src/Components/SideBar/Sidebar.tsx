@@ -50,7 +50,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       { name: value },
     ]);
 
-    await api.post('http://localhost:8000/project', {
+    await api.post('/project', {
       ProjectName: value,
       guestId: guestId
     })
