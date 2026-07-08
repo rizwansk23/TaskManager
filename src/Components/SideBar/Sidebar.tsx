@@ -6,6 +6,7 @@ import type { getData } from "../../Layout/AppLayout";
 import List from "./List";
 import type { dataProp } from "../../data/data";
 import GenerateId from "../../utils/GenerateId";
+import api from "../../utils/Axios";
 
 const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, setIsOpen }) => {
 

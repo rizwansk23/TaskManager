@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { type dataProp } from "./data/data";
 import Home from "./Pages/Home";
 import GenerateId from "./utils/GenerateId";
-import axios from "axios";
 import NotFound from "./Pages/NotFound";
 import api from "./utils/Axios";
 
@@ -20,7 +19,7 @@ const App = () => {
   useEffect(() => {
     const fetch = async () => {
       try{
-        const response = (await axios.get('/project', { params: { "guestId": guestId }})).data
+        const response = (await api.get('/project', { params: { "guestId": guestId }})).data
 
       setData(response.data)
       setLoading(false);
