@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../Components/Main/Modal";
 import { type dataProp, type Task, type TaskType } from "../data/data";
-import axios from "axios";
 import TileBox from "../Components/Main/TileBox";
 import { useDebounce } from "../Hook/Debouncing";
 import TodoCard from "../Components/Main/TodoCard";
+import api from "../utils/Axios";
 
 const COLUMNS: { status: TaskType; title: string }[] = [
   { status: "todo", title: "To Do" },
@@ -59,7 +59,7 @@ const MainPage: React.FC<{
 
     setDraggingId(null);
 
-    await axios.patch(
+    await api.patch(
       `/project/${currentProject?._id}/task/${draggingId}`,
       { status: targetType },
     );
@@ -86,7 +86,7 @@ const MainPage: React.FC<{
             },
       ),
     );
-    await axios.patch(
+    await api.patch(
       `/project/${currentProject?._id}/task/${taskId}`,
       { status: taskType },
     );
@@ -105,7 +105,7 @@ const MainPage: React.FC<{
             },
       ),
     );
-    await axios.delete(`/project/${currentProject?._id}/task/${taskId}`)
+    await api.delete(`/project/${currentProject?._id}/task/${taskId}`)
   };
   return (
     <div className="w-full bg-bg text-text">
