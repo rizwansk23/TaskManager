@@ -7,7 +7,7 @@ import Home from "./Pages/Home";
 import GenerateId from "./utils/GenerateId";
 import axios from "axios";
 import NotFound from "./Pages/NotFound";
-
+import api from "./utils/Axios";
 
 const App = () => {
 
