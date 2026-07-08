@@ -1,13 +1,17 @@
-import React, { useState, type DragEvent } from "react";
-import { type dataProp, type Task, type TaskType } from "../../data/data";
+import React, {
+  useState,
+  type DragEvent,
+} from "react";
+import { type Task, type TaskType } from "../../data/data";
+import TodoCard from "./TodoCard";
 
 interface TileBoxProps {
   title: string;
   type: TaskType;
   tasks: Task[];
   draggingId: string | null;
-  name: string;
-  setData: React.Dispatch<React.SetStateAction<dataProp[]>>;
+  handleDone: (taskId: string, task: Task) => Promise<void>;
+  handleDelete : (taskID:string ) => Promise<void>;
   onDragStart: (id: string) => void;
   onDragEnd: () => void;
   onDrop: (targetType: TaskType) => void;
@@ -18,8 +22,8 @@ const TileBox: React.FC<TileBoxProps> = ({
   type,
   tasks,
   draggingId,
-  name,
-  setData,
+  handleDone,
+  handleDelete,
   onDragStart,
   onDragEnd,
   onDrop,
@@ -37,27 +41,6 @@ const TileBox: React.FC<TileBoxProps> = ({
     e.preventDefault();
     setIsOver(false);
     onDrop(type);
-  };
-
-  const handleDone = (taskId: string) => {
-    setData((prev) =>
-      prev.map((d) =>
-        d.name !== name
-          ? d
-          : {
-              ...d,
-              tasks: d.tasks?.map((t) =>
-                t._id === taskId ? { ...t, status: "completed" } : t,
-              ),
-            },
-      ),
-    );
-  };
-
-  const bg = {
-    completed: "bg-green-400",
-    todo: "bg-red-400",
-    progress: "bg-yellow-400",
   };
 
   return (
@@ -91,11 +74,10 @@ const TileBox: React.FC<TileBoxProps> = ({
         )}
 
         {filtered.map((task) => {
-          const isSelected = task.status === "completed";
+          const isSelected: boolean = task.status === "completed";
           return (
-            <label
+            <div
               key={task._id}
-              htmlFor={task._id}
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.effectAllowed = "move";
@@ -104,44 +86,16 @@ const TileBox: React.FC<TileBoxProps> = ({
               }}
               onDragEnd={onDragEnd}
               className={`
-                flex items-center gap-3 px-3 py-2.5 rounded-xl
-                border border-transparent cursor-grab active:cursor-grabbing
-                select-none transition-all duration-150
-                hover:border-gray-300 hover:bg-white dark:hover:bg-gray-800
                 ${draggingId === task._id ? "opacity-40 scale-95" : "opacity-100"}
               `}
             >
-              <span
-                className="text-gray-300 text-lg leading-none"
-                onPointerDown={(e) => e.stopPropagation()}
-              >
-                <div className={`size-2 rounded-full ${bg[task.status]}`} />
-              </span>
-
-              <input
-                type="checkbox"
-                checked={isSelected}
-                id={task._id}
-                name={task.name}
-                className="accent-bg size-4 hover:accent-indigo-600 rounded-3xl hover:cursor-pointer"
-                onChange={() => handleDone(task._id)}
-                onPointerDown={(e) => e.stopPropagation()}
+              <TodoCard
+              handleDelete={handleDelete}
+                isSelected={isSelected}
+                task={task}
+                handleDone={handleDone}
               />
-
-              <span
-                className={`flex-1 text-sm ${
-                  isSelected
-                    ? "line-through decoration-1 text-gray-600"
-                    : "text-text-h"
-                }`}
-              >
-                {task.name}
-              </span>
-
-              <span className="text-xs text-gray-400 capitalize">
-                {task.status}
-              </span>
-            </label>
+            </div>
           );
         })}
       </div>
@@ -150,3 +104,5 @@ const TileBox: React.FC<TileBoxProps> = ({
 };
 
 export default TileBox;
+
+

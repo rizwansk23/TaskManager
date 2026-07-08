@@ -1,42 +1,37 @@
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import AddButton from "../AddButton";
-import type { dataProp, Task } from "../../data/data";
+import type { dataProp } from "../../data/data";
 import axios from "axios";
 
-const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<React.SetStateAction<dataProp[]>> }> = ({ name, data, setData }) => {
+const Modal: React.FC<{ currentProject : dataProp | undefined, setData: React.Dispatch<React.SetStateAction<dataProp[]>> }> = ({ currentProject, setData }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [duedate, setDueDate] = useState<string>("");
+  const [isEmpty, setEmpty] = useState<boolean>(false);
 
   const currentdate = new Date().toISOString().split("T")[0];
-  const date = new Date();
-  date.setDate(date.getDate() + 10);
-  const maxDateString = date.toISOString().split("T")[0];
-
-
-  const currentProject: dataProp | undefined = data.find((data) => data.name == name)
-
 
   async function HandleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
+    
+    const TitleValue = title.trim()
 
-    console.log(title);
-    console.log(message);
-    console.log(maxDateString);
+    if (TitleValue === '') return setEmpty(true)
+
+    const id : string = crypto.randomUUID().toString()
 
     setData((prev) =>
       prev.map((project) =>
-        project.name === currentProject?.name 
+        project.name === currentProject?.name
           ? {
             ...project,
             tasks: [
               ...(project.tasks ?? []),
               {
-                _id : crypto.randomUUID(),
+                _id: id,
                 name: title,
                 status: "todo",
+                date: currentdate
               },
             ],
           }
@@ -44,13 +39,16 @@ const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<
       )
     );
 
-
-    await axios.post(`http://localhost:8000/project/${currentProject?._id}/task`, { name: title })
-
-    setDueDate("");
-    setTitle("");
-    setMessage("");
-    setIsOpen(!isOpen);
+    try {
+      await axios.post(`http://localhost:8000/project/${currentProject?._id}/task`, { _id: id, name: TitleValue, date: currentdate });
+    }
+    catch (err) {
+      alert(err)
+    } finally {
+      setTitle("");
+      setEmpty(false)
+      setIsOpen(!isOpen);
+    }
   }
 
   return (
@@ -64,7 +62,7 @@ const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<
         >
           <div className="bg-black w-1/3 h-fit px-4 py-5 rounded-2xl">
             <header className="flex justify-between items-center text-text-h text-xl">
-              <kbd className="text-2xl font-bold">Create</kbd>
+              <kbd className="text-3xl font-bold">Create</kbd>
               <button className="cursor-pointer active:scale-90" onClick={() => setIsOpen((prev) => !prev)}>
                 <X />
               </button>
@@ -76,8 +74,8 @@ const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<
                 }}
                 className="flex flex-col"
               >
-                <div className="title flex flex-col gap-1 py-2">
-                  <label htmlFor="title" className="text-sm font-medium">
+                <div className="title flex flex-col gap-1.5 py-2 pb-20">
+                  <label htmlFor="title" className="text-base font-medium">
                     Task title
                   </label>
                   <input
@@ -87,35 +85,11 @@ const Modal: React.FC<{ name: string, data: dataProp[], setData: React.Dispatch<
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="title"
-                    className="border border-border rounded-xl py-1 px-2"
+                    className="border border-border rounded-xl py-2 px-3 text-xl text-text-h"
                   />
+                  {isEmpty && <h2 className="text-red-600 px-3 ">opps.. please enter the value </h2>}
                 </div>
-                <div className="title flex flex-col gap-1 py-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Task Message
-                  </label>
-                  <textarea
-                    placeholder="message"
-                    name="message"
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="border border-border rounded-xl py-1 px-2"
-                  ></textarea>
-                </div>
-                <div className=" gap-1 py-2">
-                  <input
-                    type="date"
-                    name=""
-                    id="date"
-                    min={currentdate}
-                    value={duedate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    max={maxDateString}
-                    className="border border-border rounded-xl px-3 py-2 [&::-webkit-calendar-picker-indicator]:invert"
-                  />
-                </div>
-                <input type="submit" value="create" />
+                <input type="submit" value="create" className="flex items-center hover:border-boder cursor-pointer hover:border rounded-2xl text-lg  text-center  py-2 " />
               </form>
             </main>
           </div>

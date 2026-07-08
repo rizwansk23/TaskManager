@@ -13,23 +13,23 @@ const App = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false); //used to create or open to create a new folder 
   const [isloading, setLoading] = useState<boolean>(true)
 
-  const guestId = GenerateId();
+  const guestId = GenerateId(); // generate a random id 
 
   useEffect(() => {
     const fetch = async () => {
       try{
-        const response = await (await axios.get('http://localhost:8000/project', { params: { "guestId": guestId } })).data
+        const response = (await axios.get('http://localhost:8000/project', { params: { "guestId": guestId }})).data
 
       setData(response.data)
       setLoading(false);
       }catch(err){
-        console.log(err);
+        console.log(err); 
         console.log("not connected");
       }
     }
 
     fetch()
-  }, [])
+  }, [isOpen])
 
 
 
@@ -40,7 +40,7 @@ const App = () => {
       children: [
         {
           path: "/:taskTitle/",
-          element: <Main Data={Data} isLoading={isloading}/>
+          element: <Main Data={Data} isLoading={isloading} setData={setData}/>
         }, {
           path: '/',
           element: <Home Data={Data} isOpen={isOpen} setIsOpen={setIsOpen} />

@@ -54,8 +54,7 @@ const Sidebar: React.FC<Omit<getData, 'isLoading'>> = ({ Data, setData, isOpen, 
       ProjectName: value,
       guestId: guestId
     })
-    // const values  = decodeURIComponent(value)
-    // console.log(values)
+    
     navigate(`/${value}`)
     setSelected(value)
     setIsOpen(!isOpen);

@@ -15,8 +15,9 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
           <Layers size={60} />
         </div>
         <kbd className="text-4xl text-text-h font-bold">Your WorkSpace</kbd>
-        <div className="leading-5 tracking-tight">
-          <h5>Select a project from the sidebar or </h5>
+        <div className="leading-5 tracking-tight text-center">
+          <h5>Select a project from the sidebar </h5>
+          <h5>or</h5>
           <h5> create a new one to get started.</h5>
         </div>
         <AddButton
@@ -25,7 +26,7 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
             setIsOpen(!isOpen);
           }}
         />
-        <kbd className="uppercase">Recent Projects</kbd>
+        {Data && <kbd className="uppercase">Recent Projects</kbd>}
         <div
           className={`grid grid-cols-3 gap-3 ${
             open ? "h-fit" : "overflow-hidden h-30"
@@ -36,7 +37,7 @@ const Home: React.FC<getonlyData> = ({ Data, isOpen, setIsOpen }) => {
 
             return (
               <Link key={data.name} to={data.name}>
-                <div className="border border-border rounded-2xl bg-code-bg px-4 py-2 w-40">
+                <div className="border border-border hover:border-gray-600 rounded-2xl bg-code-bg px-4 py-2 w-40 hover:bg-border">
                   <h1 className="text-xl text-text-h font-bold">{data.name}</h1>
                   <p>{taskCount} task</p>
                 </div>

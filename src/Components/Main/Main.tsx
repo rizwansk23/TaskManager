@@ -4,9 +4,9 @@ import type { getData } from "../../Layout/AppLayout";
 import { useNavigate } from "react-router-dom";
 import MainPage from "./MainPage";
 
-export type onlyData = Pick<getData, "Data" | 'isLoading'>
+export type onlyData = Pick<getData, "Data" | 'isLoading' | 'setData'>
 
-const Main: React.FC<onlyData> = ({ Data, isLoading }) => {
+const Main: React.FC<onlyData> = ({ Data, isLoading , setData }) => {
     const location = GetPath();
     const Paths = decodeURIComponent(location) //remove the space %20 in url 
     const navigate = useNavigate()
@@ -22,7 +22,7 @@ const Main: React.FC<onlyData> = ({ Data, isLoading }) => {
     return (
         <>
             {isTaskFound ? (
-                <MainPage name={Paths} data={Data} />
+                <MainPage name={Paths} data={Data} setData={setData} />
             ) : (
                 <div className="w-full bg-red-100 h-screen">
                     <h1 className="text-text">not found</h1>

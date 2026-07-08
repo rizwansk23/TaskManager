@@ -15,6 +15,7 @@ export interface Task {
   _id: string;
   name: string;
   status: TaskType;
+  date?:string;
 }
  
 
