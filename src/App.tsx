@@ -37,6 +37,7 @@ const App = () => {
     {
       path: "/",
       element: <AppLayout Data={Data} setData={setData} isOpen={isOpen} setIsOpen={setIsOpen} />,
+      errorElement: <NotFound Data={Data}/>,
       children: [
         {
           path: "/:taskTitle/",
